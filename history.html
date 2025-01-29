@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Result History</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+    }
+    h1, h2, h5 {
+      font-weight: bold;
+      color: #343a40;
+    }
+    .card {
+      border-radius: 15px;
+    }
+    .card-title {
+      font-size: 1.2rem;
+    }
+    .description {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+    footer {
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
+    <a class="navbar-brand" href="#">SpeechCare</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Result History</h1>
+
+    <!-- Patient's Current Situation -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Patient's Current Situation</h5>
+        <p class="description">
+          The patient is currently in the <b>Moderate Cognitive Impairment</b> stage, based on the latest analysis. Progress is being tracked through regular speech tasks, and gradual improvement is noted in speech fluency and storytelling abilities.
+        </p>
+      </div>
+    </div>
+
+    <!-- Explanation of Graph Colors -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Understanding the Graph Colors</h5>
+        <ul class="description">
+          <li><span style="color: #ff6384; font-weight: bold;">Red:</span> Indicates pauses in speech.</li>
+          <li><span style="color: #36a2eb; font-weight: bold;">Blue:</span> Represents the number of fillers used during tasks.</li>
+          <li><span style="color: #ffcd56; font-weight: bold;">Yellow:</span> Reflects the speech rate (words per minute).</li>
+        </ul>
+        <p class="description">Lower pauses and fillers, along with a consistent speech rate, suggest improvement in cognitive abilities.</p>
+      </div>
+    </div>
+
+    <!-- Monthly Progress Cards -->
+    <h2 class="text-center mb-4">Monthly Progress</h2>
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">January Progress</h5>
+            <canvas id="chartJanuary"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">February Progress</h5>
+            <canvas id="chartFebruary"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Progress -->
+    <h2 class="text-center mb-4">Weekly Progress</h2>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Week 1</h5>
+            <canvas id="chartWeek1"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Week 2</h5>
+            <canvas id="chartWeek2"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Week 3</h5>
+            <canvas id="chartWeek3"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Previous Tasks History -->
+    <h2 class="text-center mb-4">Previous Tasks History</h2>
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <ul class="description">
+          <li><b>Fluency Task:</b> Completed on January 15, February 10, and March 5.</li>
+          <li><b>Story Retelling Task:</b> Improved clarity and recall noted in February and March sessions.</li>
+          <li><b>Word Recall Task:</b> Moderate difficulty with names and objects, showing slight improvement in March.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center py-3 mt-5 bg-light">
+    <p>© 2025 SpeechCare. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Chart Data
+    const monthlyData = [
+      { id: 'chartJanuary', label: 'January', data: [15, 12, 120], colors: ['#ff6384', '#36a2eb', '#ffcd56'] },
+      { id: 'chartFebruary', label: 'February', data: [12, 10, 130], colors: ['#4bc0c0', '#9966ff', '#ff9f40'] }
+    ];
+
+    const weeklyData = [
+      { id: 'chartWeek1', label: 'Week 1', data: [5, 3, 40], colors: ['#f94144', '#f3722c', '#f8961e'] },
+      { id: 'chartWeek2', label: 'Week 2', data: [4, 2, 50], colors: ['#43aa8b', '#577590', '#f9c74f'] },
+      { id: 'chartWeek3', label: 'Week 3', data: [3, 2, 60], colors: ['#90be6d', '#f94144', '#f9844a'] }
+    ];
+
+    const renderChart = ({ id, label, data, colors }) => {
+      new Chart(document.getElementById(id), {
+        type: 'bar',
+        data: {
+          labels: ['Pauses', 'Fillers', 'Speech Rate'],
+          datasets: [{
+            label: label,
+            data: data,
+            backgroundColor: colors
+          }]
+        },
+        options: { responsive: true }
+      });
+    };
+
+    // Render all charts
+    [...monthlyData, ...weeklyData].forEach(renderChart);
+  </script>
+</body>
+</html>
